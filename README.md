@@ -42,16 +42,36 @@ Claude Code expects an Anthropic-style API. Many third-party providers expose Op
 pipx install .
 ```
 
+### Option 1b: pipx from GitHub
+
+```bash
+pipx install git+https://github.com/yvzhou1111/claude-openai-bridge.git
+```
+
 ### Option 2: pip
 
 ```bash
 python -m pip install .
 ```
 
+### Option 2b: pip from GitHub
+
+```bash
+python -m pip install git+https://github.com/yvzhou1111/claude-openai-bridge.git
+```
+
 ### Option 3: run from source
 
 ```bash
 python -m pip install -e .
+```
+
+### Option 4: install from a GitHub Release artifact
+
+After the first release, download the `.whl` or `.tar.gz` from the GitHub Releases page and install it directly:
+
+```bash
+python -m pip install claude_openai_bridge-0.1.0-py3-none-any.whl
 ```
 
 ## Quick Start
