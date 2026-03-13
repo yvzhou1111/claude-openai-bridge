@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "claude-openai-bridge"
+version = "0.1.0"
+description = "Use OpenAI-compatible endpoints inside Claude Code with a lightweight local bridge."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "yvzhou1111" }
+]
+dependencies = [
+  "Pillow>=10.0.0"
+]
+
+[project.scripts]
+claude-openai-bridge = "claude_openai_bridge.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
