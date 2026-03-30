@@ -15,6 +15,7 @@ from urllib.request import Request, urlopen
 from PIL import Image, ImageDraw, ImageFont
 
 from .config import BridgeConfig, load_config, save_config
+from .origin_probe import mask_secret, probe_origin
 from .paths import claude_settings_paths, config_file, system_name
 from .proxy import serve
 from .service import install_service, restart_installed_service, service_status, uninstall_service
@@ -412,6 +413,20 @@ def verify_command(_args) -> int:
     return 0
 
 
+def probe_origin_command(args) -> int:
+    report = probe_origin(
+        args.base_url,
+        args.api_key,
+        model=args.model,
+        anthropic_version=args.anthropic_version,
+        timeout=args.timeout,
+    )
+    payload = report.to_dict()
+    payload["api_key"] = mask_secret(args.api_key)
+    print(pretty_json(payload))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="OpenAI-compatible upstreams inside Claude Code.")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -439,6 +454,17 @@ def build_parser() -> argparse.ArgumentParser:
 
     verify_parser = subparsers.add_parser("verify", help="Verify the currently saved upstream")
     verify_parser.set_defaults(func=verify_command)
+
+    probe_parser = subparsers.add_parser(
+        "probe-origin",
+        help="Classify whether an Anthropic-compatible endpoint looks direct, Vertex-backed, or proxied",
+    )
+    probe_parser.add_argument("--base-url", required=True)
+    probe_parser.add_argument("--api-key", required=True)
+    probe_parser.add_argument("--model")
+    probe_parser.add_argument("--anthropic-version", default="2023-06-01")
+    probe_parser.add_argument("--timeout", type=int, default=30)
+    probe_parser.set_defaults(func=probe_origin_command)
     return parser
 
 

@@ -147,6 +147,30 @@ claude-openai-bridge verify
 
 This validates the currently saved upstream.
 
+### Probe Origin
+
+```bash
+claude-openai-bridge probe-origin \
+  --base-url https://example.com \
+  --api-key sk-... \
+  --model claude-opus-4-1-20250805
+```
+
+This runs direct probes against an Anthropic-compatible endpoint and prints a JSON report that:
+
+- resolves the effective `/v1/*` paths
+- collects root-page and response-header hints
+- inspects `/models` metadata
+- checks whether requested and returned model names match
+- classifies the endpoint as one of:
+  - `direct_anthropic_likely`
+  - `vertex_ai_anthropic_likely`
+  - `proxy_to_vertex_ai_possible`
+  - `third_party_proxy_likely`
+  - `unknown`
+
+The report is intended for attribution and fraud-screening, not billing-grade proof. A compatibility gateway can still hide the true upstream.
+
 ### Status
 
 ```bash
